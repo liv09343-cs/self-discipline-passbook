@@ -20,6 +20,10 @@ export function BookPanel({ onClose, toast }: Props) {
       toast('请填写新存折的名称', 'warn');
       return;
     }
+    if (state.books.length >= 20) {
+      toast('每个账号最多 20 本存折，请先删除不用的账本', 'warn');
+      return;
+    }
     const created = actions.createBook(newName, newGlyph);
     toast(`已新建存折「${created.name}」，并切换过去`, 'ok');
     setNewName('');
