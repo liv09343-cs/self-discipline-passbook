@@ -27,6 +27,7 @@ export interface SupabaseSnapshot {
   user: SupabaseUserInfo | null;
   message: string;
   lastSyncAt: string | null;
+  captchaSiteKey: string | null;
 }
 
 export interface SignUpResult {
@@ -113,6 +114,7 @@ class SupabaseSyncService {
     user: null,
     message: '正在检查 Supabase 配置',
     lastSyncAt: null,
+    captchaSiteKey: null,
   };
   private listeners = new Set<() => void>();
   private initPromise: Promise<void> | null = null;
@@ -198,6 +200,11 @@ class SupabaseSyncService {
         url: String(config.url),
         anonKey: String(key),
       };
+      this.setSnapshot({
+        captchaSiteKey: config.captchaSiteKey
+          ? String(config.captchaSiteKey)
+          : null,
+      });
       const { createClient } = await import('@supabase/supabase-js');
       const client = createClient(this.config.url, this.config.anonKey, {
         auth: {
@@ -270,7 +277,11 @@ class SupabaseSyncService {
     }
   }
 
-  async signIn(email: string, password: string): Promise<void> {
+  async signIn(
+    email: string,
+    password: string,
+    captchaToken?: string,
+  ): Promise<void> {
     await this.init();
     const client = this.requireClient();
     this.setSnapshot({ status: 'signing', message: '正在登录…' });
@@ -278,6 +289,7 @@ class SupabaseSyncService {
       const { data, error } = await client.auth.signInWithPassword({
         email,
         password,
+        ...(captchaToken ? { options: { captchaToken } } : {}),
       });
       if (error) throw error;
       if (!data.user) throw new Error('登录失败：未返回用户信息');
@@ -291,7 +303,11 @@ class SupabaseSyncService {
     }
   }
 
-  async signUp(email: string, password: string): Promise<SignUpResult> {
+  async signUp(
+    email: string,
+    password: string,
+    captchaToken?: string,
+  ): Promise<SignUpResult> {
     await this.init();
     const client = this.requireClient();
     this.setSnapshot({ status: 'signing', message: '正在注册…' });
@@ -301,6 +317,7 @@ class SupabaseSyncService {
         password,
         options: {
           emailRedirectTo: `${window.location.origin}${window.location.pathname}`,
+          ...(captchaToken ? { captchaToken } : {}),
         },
       });
       if (error) throw error;

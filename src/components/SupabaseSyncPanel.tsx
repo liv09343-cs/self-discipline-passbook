@@ -1,10 +1,11 @@
-import { useState } from 'react';
+import { useCallback, useState } from 'react';
 import {
   supabaseSync,
   type SupabaseStatus,
 } from '../lib/supabaseSync';
 import { useSupabaseSnapshot } from '../hooks/useSupabaseSync';
 import { relativeTime } from '../lib/date';
+import { TurnstileWidget } from './TurnstileWidget';
 import type { ToastTone } from './Toast';
 
 interface Props {
@@ -30,6 +31,16 @@ export function SupabaseSyncPanel({ toast }: Props) {
   const [busy, setBusy] = useState(false);
   const [error, setError] = useState('');
   const [confirmForce, setConfirmForce] = useState(false);
+  const [captchaToken, setCaptchaToken] = useState('');
+  const [captchaKey, setCaptchaKey] = useState(0);
+
+  const handleToken = useCallback((token: string) => {
+    setCaptchaToken(token);
+  }, []);
+
+  const handleExpire = useCallback(() => {
+    setCaptchaToken('');
+  }, []);
 
   const guard = async (
     task: () => Promise<void>,
@@ -58,15 +69,27 @@ export function SupabaseSyncPanel({ toast }: Props) {
       setError('请填写邮箱与密码');
       return;
     }
+    if (cloud.captchaSiteKey && !captchaToken) {
+      setError('请先完成人机验证');
+      return;
+    }
     void (async () => {
       setBusy(true);
       setError('');
       try {
         if (mode === 'signin') {
-          await supabaseSync.signIn(value, password);
+          await supabaseSync.signIn(
+            value,
+            password,
+            captchaToken || undefined,
+          );
           toast('登录成功，已开始云端同步', 'ok');
         } else {
-          const result = await supabaseSync.signUp(value, password);
+          const result = await supabaseSync.signUp(
+            value,
+            password,
+            captchaToken || undefined,
+          );
           if (result.needsConfirm) {
             toast('注册成功，请查收邮箱里的确认链接后再登录', 'warn');
             setMode('signin');
@@ -80,6 +103,8 @@ export function SupabaseSyncPanel({ toast }: Props) {
           supabaseSync.getSnapshot().message ||
           '操作失败';
         setError(message);
+        setCaptchaToken('');
+        setCaptchaKey((key) => key + 1);
         toast(message, 'error');
       } finally {
         setBusy(false);
@@ -154,14 +179,22 @@ export function SupabaseSyncPanel({ toast }: Props) {
             <button
               type="button"
               className={`cloud-tab${mode === 'signin' ? ' is-active' : ''}`}
-              onClick={() => setMode('signin')}
+              onClick={() => {
+                setMode('signin');
+                setCaptchaToken('');
+                setCaptchaKey((key) => key + 1);
+              }}
             >
               登录
             </button>
             <button
               type="button"
               className={`cloud-tab${mode === 'signup' ? ' is-active' : ''}`}
-              onClick={() => setMode('signup')}
+              onClick={() => {
+                setMode('signup');
+                setCaptchaToken('');
+                setCaptchaKey((key) => key + 1);
+              }}
             >
               注册
             </button>
@@ -188,6 +221,14 @@ export function SupabaseSyncPanel({ toast }: Props) {
               />
             </label>
           </div>
+          {cloud.captchaSiteKey && (
+            <TurnstileWidget
+              key={captchaKey}
+              siteKey={cloud.captchaSiteKey}
+              onToken={handleToken}
+              onExpire={handleExpire}
+            />
+          )}
           <div className="form-actions" style={{ marginTop: 10 }}>
             <button
               type="button"
@@ -205,6 +246,9 @@ export function SupabaseSyncPanel({ toast }: Props) {
           <p className="mini-note" style={{ marginTop: 8 }}>
             Supabase 默认会发送邮箱确认链接。演示时可在 Authentication →
             Providers → Email 里关闭 Confirm email，注册后即可直接登录。
+            {cloud.captchaSiteKey
+              ? ' 已启用 Turnstile 人机验证，提交前请先完成验证。'
+              : ''}
           </p>
         </div>
       )}

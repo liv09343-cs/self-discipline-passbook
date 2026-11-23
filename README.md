@@ -54,11 +54,20 @@ npm run preview
 ```json
 {
   "url": "https://your-project.supabase.co",
-  "key": "sb_publishable_xxx"
+  "key": "sb_publishable_xxx",
+  "captchaSiteKey": ""
 }
 ```
 
 只使用 Publishable key，**不要**把 Secret key 放进前端。
+
+`captchaSiteKey` 可选。在 Supabase 开启 Attack Protection 的 CAPTCHA 后，填入 Cloudflare Turnstile 的 Site Key，前端会自动渲染人机验证；Secret Key 只填在 Supabase 控制台。
+
+防滥用建议：
+
+- 保持邮箱确认开启
+- 在 Authentication → Rate Limits 限制注册与发信频率
+- 执行 `supabase/security-hardening.sql`，限制每用户 20 本存折、单本 512KB
 
 ## 部署
 
