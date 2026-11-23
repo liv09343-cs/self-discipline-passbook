@@ -185,33 +185,6 @@ export function createSeedState(): AppState {
     ),
   ];
 
-  const study = createBook('考研存折', '研');
-  study.motto = '一页一页翻，一天一天存。';
-  study.subjects = [
-    { id: uid(), name: '数学一', glyph: '数', coinsPerHour: 1 },
-    { id: uid(), name: '英语一', glyph: '英', coinsPerHour: 1 },
-    { id: uid(), name: '专业课', glyph: '专', coinsPerHour: 1 },
-  ];
-  study.deadlines = [
-    makeDeadline(
-      '考研网上报名截止',
-      20,
-      22,
-      0,
-      'other',
-      2880,
-      '核对报考点与证件信息',
-    ),
-    makeDeadline(
-      '专业课模拟考试',
-      12,
-      8,
-      30,
-      'exam',
-      1440,
-      '按正式考试时间完整模拟',
-    ),
-  ];
 
   return {
     version: 2,
@@ -220,7 +193,7 @@ export function createSeedState(): AppState {
       deviceId: uid(),
     },
     activeBookId: main.id,
-    books: [main, study],
+    books: [main],
     settings: {
       coinsPerHourDefault: 1,
       minSessionMinutes: 5,

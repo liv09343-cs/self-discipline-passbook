@@ -107,6 +107,16 @@ function reducer(state: AppState, action: Action): AppState {
   }
 }
 
+function isLegacySeedStudy(book: Book): boolean {
+  return (
+    book.name === '考研存折' &&
+    book.sessions.length === 0 &&
+    book.ledger.length === 1 &&
+    book.ledger[0]?.kind === 'grant' &&
+    book.deadlines.length === 2
+  );
+}
+
 function migrate(raw: unknown): AppState {
   if (!raw || typeof raw !== 'object') return createSeedState();
   const data = raw as Record<string, any>;
@@ -116,7 +126,22 @@ function migrate(raw: unknown): AppState {
     data.books.length > 0
   ) {
     try {
-      return validateState(data);
+      const normalized = validateState(data);
+      const books = normalized.books.filter(
+        (book) => !isLegacySeedStudy(book),
+      );
+      if (books.length !== normalized.books.length && books.length > 0) {
+        return {
+          ...normalized,
+          books,
+          activeBookId: books.some(
+            (book) => book.id === normalized.activeBookId,
+          )
+            ? normalized.activeBookId
+            : books[0].id,
+        };
+      }
+      return normalized;
     } catch {
       return createSeedState();
     }

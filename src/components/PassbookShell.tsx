@@ -89,15 +89,28 @@ export function PassbookShell({ tab, onTabChange, toast, children }: Props) {
                 }}
               />
             ) : (
-              <dd
-                title="点击修改户名"
-                style={{ cursor: 'pointer' }}
-                onClick={() => {
-                  setDraftName(state.profile.name);
-                  setEditingName(true);
-                }}
-              >
-                {state.profile.name}
+              <dd style={{ display: 'flex', alignItems: 'center', gap: 6 }}>
+                <span
+                  title="点击修改户名"
+                  style={{ cursor: 'pointer' }}
+                  onClick={() => {
+                    setDraftName(state.profile.name);
+                    setEditingName(true);
+                  }}
+                >
+                  {state.profile.name}
+                </span>
+                <button
+                  type="button"
+                  className="btn btn-sm btn-ghost"
+                  style={{ padding: '0 4px', fontSize: 10, flexShrink: 0 }}
+                  onClick={() => {
+                    setDraftName(state.profile.name);
+                    setEditingName(true);
+                  }}
+                >
+                  修改
+                </button>
               </dd>
             )}
           </div>
