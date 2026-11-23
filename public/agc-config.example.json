@@ -1,0 +1,8 @@
+{
+  "_readme": "复制本文件为 public/agc-config.json，并用 AGC 控制台下载的 agconnect-services.json 完整内容替换。真实配置文件已被 .gitignore 忽略，请勿提交。",
+  "app_id": "REPLACE_WITH_AGC_APP_ID",
+  "client_id": "REPLACE_WITH_AGC_CLIENT_ID",
+  "client_secret": "REPLACE_WITH_AGC_CLIENT_SECRET",
+  "api_key": "REPLACE_WITH_AGC_API_KEY",
+  "configuration_version": "1.0"
+}

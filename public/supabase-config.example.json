@@ -1,0 +1,5 @@
+{
+  "_readme": "复制本文件为 public/supabase-config.json。url 填 Project Settings → Data API 里的 Project URL；key 填 API Keys 页面的 Publishable key（sb_publishable_...），不要填 Secret key。",
+  "url": "https://YOUR_PROJECT.supabase.co",
+  "key": "sb_publishable_..."
+}

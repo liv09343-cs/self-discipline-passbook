@@ -1,0 +1,10 @@
+node_modules
+dist
+.tools
+public/agc-config.json
+public/agc-schema.json
+
+dist-ssr
+*.local
+.vite
+.DS_Store
