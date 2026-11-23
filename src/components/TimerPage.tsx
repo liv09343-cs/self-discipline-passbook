@@ -1,7 +1,8 @@
-import { useState, type FormEvent } from 'react';
+import { useEffect, useRef, useState, type FormEvent } from 'react';
 import { useApp, useElapsedMs, type Settlement } from '../store/AppStore';
 import { formatClock, formatMinutes } from '../lib/date';
 import { coinsFromMinutes, formatCoins } from '../lib/money';
+import { playGoalChime } from '../lib/sound';
 import {
   streakDays,
   subjectBreakdown,
@@ -25,6 +26,9 @@ export function TimerPage({ toast, onGoCalendar }: Props) {
   const [newName, setNewName] = useState('');
   const [newRate, setNewRate] = useState(state.settings.coinsPerHourDefault);
   const [discardArmed, setDiscardArmed] = useState(false);
+  const [targetMinutes, setTargetMinutes] = useState<number | null>(25);
+  const [customTarget, setCustomTarget] = useState('');
+  const goalNotifiedRef = useRef(false);
 
   const timer = book.timer;
   const subject =
@@ -41,16 +45,55 @@ export function TimerPage({ toast, onGoCalendar }: Props) {
   const maxMinutes = breakdown[0]?.minutes ?? 0;
 
   const start = (subjectId: string) => {
-    actions.startTimer(subjectId);
+    actions.startTimer(subjectId, targetMinutes);
+    goalNotifiedRef.current = false;
     setSettlement(null);
     setDiscardArmed(false);
   };
+
+  const activeTarget = timer.targetMinutes;
+  const targetMs = activeTarget ? activeTarget * 60000 : 0;
+  const targetProgress =
+    targetMs > 0 ? Math.min(100, Math.round((elapsed / targetMs) * 100)) : 0;
+  const targetRemaining = Math.max(0, targetMs - elapsed);
+  const targetReached =
+    Boolean(activeTarget) && targetMs > 0 && elapsed >= targetMs;
+
+  useEffect(() => {
+    if (!timer.subjectId || !activeTarget || !targetReached) return;
+    if (goalNotifiedRef.current) return;
+    goalNotifiedRef.current = true;
+    playGoalChime();
+    if (
+      typeof Notification !== 'undefined' &&
+      Notification.permission === 'granted'
+    ) {
+      try {
+        const notification = new Notification('专注目标达成', {
+          body: `${subject?.name ?? '自律'} · 已完成 ${activeTarget} 分钟，可以继续存折`,
+          icon: './icons/icon-192.png',
+          tag: 'focus-goal',
+        });
+        notification.onclick = () => {
+          window.focus();
+          notification.close();
+        };
+      } catch {
+        // ignore
+      }
+    }
+    toast(
+      `目标达成：${activeTarget} 分钟，继续专注可存更多硬币`,
+      'ok',
+    );
+  }, [activeTarget, subject?.name, targetReached, timer.subjectId, toast]);
 
   const finish = () => {
     const result = actions.finishTimer(note.trim());
     setSettlement(result);
     setNote('');
     setDiscardArmed(false);
+    goalNotifiedRef.current = false;
     if (result.counted) {
       toast(
         `已存入 ${formatCoins(result.coins)} 枚硬币、${result.stars} 颗星，继续加油`,
@@ -75,6 +118,7 @@ export function TimerPage({ toast, onGoCalendar }: Props) {
     actions.discardTimer();
     setDiscardArmed(false);
     setNote('');
+    goalNotifiedRef.current = false;
     toast('已放弃本次计时，时间不会存入', 'warn');
   };
 
@@ -162,6 +206,63 @@ export function TimerPage({ toast, onGoCalendar }: Props) {
               <p className="panel-sub">
                 每一项都有自己的换算利率。汇率越低，硬币越值钱。
               </p>
+
+              <div className="goal-picker">
+                <div className="goal-picker-head">
+                  <span>本次专注目标</span>
+                  <span className="mini-note">
+                    {targetMinutes ? `${targetMinutes} 分钟` : '不限时'}
+                  </span>
+                </div>
+                <div className="goal-chips">
+                  {[25, 45, 60, 90].map((minutes) => (
+                    <button
+                      key={minutes}
+                      type="button"
+                      className={`goal-chip${
+                        targetMinutes === minutes ? ' is-active' : ''
+                      }`}
+                      onClick={() => {
+                        setTargetMinutes(minutes);
+                        setCustomTarget('');
+                      }}
+                    >
+                      {minutes} 分钟
+                    </button>
+                  ))}
+                  <button
+                    type="button"
+                    className={`goal-chip${
+                      targetMinutes === null ? ' is-active' : ''
+                    }`}
+                    onClick={() => {
+                      setTargetMinutes(null);
+                      setCustomTarget('');
+                    }}
+                  >
+                    不限时
+                  </button>
+                  <input
+                    className="input goal-custom"
+                    type="number"
+                    min={1}
+                    max={600}
+                    value={customTarget}
+                    placeholder="自定义"
+                    onChange={(event) => {
+                      const value = event.target.value;
+                      setCustomTarget(value);
+                      const parsed = Number(value);
+                      if (Number.isFinite(parsed) && parsed > 0) {
+                        setTargetMinutes(Math.min(600, Math.round(parsed)));
+                      } else {
+                        setTargetMinutes(null);
+                      }
+                    }}
+                  />
+                </div>
+              </div>
+
               <div className="subject-grid">
                 {book.subjects.map((item) => (
                   <button
@@ -283,6 +384,34 @@ export function TimerPage({ toast, onGoCalendar }: Props) {
                   )}
                 </div>
               </div>
+
+              {activeTarget ? (
+                <div className="goal-meter">
+                  <div className="goal-meter-head">
+                    <span>目标 {activeTarget} 分钟</span>
+                    <span>
+                      {targetReached
+                        ? '已达成，可继续'
+                        : `还剩 ${formatClock(targetRemaining)}`}
+                    </span>
+                  </div>
+                  <div className="goal-track">
+                    <div
+                      className="goal-fill"
+                      style={{ width: `${targetProgress}%` }}
+                    />
+                  </div>
+                </div>
+              ) : null}
+
+              {targetReached ? (
+                <div className="goal-banner">
+                  <strong>目标达成</strong>
+                  <span>
+                    已专注 {activeTarget} 分钟，可以继续存折或结束本次
+                  </span>
+                </div>
+              ) : null}
 
               <label className="field" style={{ marginBottom: 12 }}>
                 <span>本次专注备注（可选）</span>

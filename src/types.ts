@@ -21,6 +21,7 @@ export interface TimerState {
   running: boolean;
   startedAt: number | null;
   accumulatedMs: number;
+  targetMinutes: number | null;
 }
 
 export interface Session {

@@ -151,7 +151,7 @@ function migrate(raw: unknown): AppState {
     }));
   }
   if (data.timer && typeof data.timer === 'object') {
-    book.timer = data.timer as Book['timer'];
+    book.timer = { ...emptyTimer(), ...(data.timer as Book['timer']) };
     if (
       book.timer.subjectId &&
       !book.subjects.some((subject) => subject.id === book.timer.subjectId)
@@ -213,7 +213,7 @@ export interface AppContextValue {
     deleteBook: (id: string) => void;
     addSubject: (name: string, coinsPerHour: number) => void;
     removeSubject: (id: string) => void;
-    startTimer: (subjectId: string) => void;
+    startTimer: (subjectId: string, targetMinutes: number | null) => void;
     pauseTimer: () => void;
     resumeTimer: () => void;
     discardTimer: () => void;
@@ -410,7 +410,7 @@ export function AppProvider({ children }: { children: ReactNode }) {
           timer:
             book.timer.subjectId === id ? emptyTimer() : book.timer,
         })),
-      startTimer: (subjectId) =>
+      startTimer: (subjectId, targetMinutes) =>
         updateActive((book) => ({
           ...book,
           timer: {
@@ -418,6 +418,7 @@ export function AppProvider({ children }: { children: ReactNode }) {
             running: true,
             startedAt: Date.now(),
             accumulatedMs: 0,
+            targetMinutes,
           },
         })),
       pauseTimer: () =>

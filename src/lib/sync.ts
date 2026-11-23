@@ -6,7 +6,13 @@ const CODE_PREFIX = 'SPB1.';
 const RAW_PREFIX = 'SPB0.';
 
 export function emptyTimer(): Book['timer'] {
-  return { subjectId: null, running: false, startedAt: null, accumulatedMs: 0 };
+  return {
+    subjectId: null,
+    running: false,
+    startedAt: null,
+    accumulatedMs: 0,
+    targetMinutes: null,
+  };
 }
 
 export function makeDeviceId(): string {
@@ -150,7 +156,7 @@ function normalizeBook(input: Record<string, unknown>): Book {
     subjects: Array.isArray(input.subjects) ? input.subjects : [],
     timer:
       input.timer && typeof input.timer === 'object'
-        ? (input.timer as Book['timer'])
+        ? { ...emptyTimer(), ...(input.timer as Book['timer']) }
         : emptyTimer(),
     sessions: Array.isArray(input.sessions) ? input.sessions : [],
     ledger: Array.isArray(input.ledger) ? input.ledger : [],
