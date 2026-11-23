@@ -1,5 +1,6 @@
 import { useState } from 'react';
 import type { TabKey } from './types';
+import { useApp } from './store/AppStore';
 import { PassbookShell } from './components/PassbookShell';
 import { TimerPage } from './components/TimerPage';
 import { LedgerPage } from './components/LedgerPage';
@@ -8,6 +9,7 @@ import { CalendarPage } from './components/CalendarPage';
 import { StatsPage } from './components/StatsPage';
 import { ToastStack, useToasts } from './components/Toast';
 import { useSupabaseAutoSync } from './hooks/useSupabaseSync';
+import { useDeadlineNotifications } from './hooks/useDeadlineNotifications';
 
 const TAB_KEYS: TabKey[] = ['timer', 'ledger', 'rewards', 'calendar', 'stats'];
 
@@ -18,7 +20,9 @@ function readTabFromHash(): TabKey {
 }
 
 export default function App() {
+  const { state } = useApp();
   useSupabaseAutoSync();
+  useDeadlineNotifications(state.books);
   const [tab, setTab] = useState<TabKey>(readTabFromHash);
   const { items, push } = useToasts();
 

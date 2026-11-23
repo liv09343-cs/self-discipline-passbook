@@ -1,0 +1,97 @@
+<!doctype html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>账页走丢了 · 自律存折</title>
+    <style>
+      :root {
+        --paper: #f2e7cf;
+        --ink: #34251a;
+        --ink-3: #8a7458;
+        --brown: #6b4a2f;
+        --vermilion: #b1342a;
+      }
+      * {
+        box-sizing: border-box;
+      }
+      body {
+        margin: 0;
+        min-height: 100vh;
+        display: grid;
+        place-items: center;
+        padding: 24px;
+        background-color: #453420;
+        background-image: repeating-linear-gradient(
+          45deg,
+          rgba(255, 240, 210, 0.02) 0 2px,
+          transparent 2px 7px
+        );
+        font-family: 'Songti SC', 'STSong', 'SimSun', 'Noto Serif SC', serif;
+        color: var(--ink);
+      }
+      .sheet {
+        width: min(520px, 100%);
+        background: var(--paper);
+        border: 2px solid var(--brown);
+        box-shadow: 9px 9px 0 0 rgba(22, 14, 6, 0.5);
+        padding: 42px 38px 36px;
+        text-align: center;
+      }
+      .kicker {
+        font-size: 10px;
+        letter-spacing: 0.4em;
+        color: var(--vermilion);
+      }
+      h1 {
+        margin: 14px 0 6px;
+        font-size: 38px;
+        letter-spacing: 0.2em;
+      }
+      p {
+        margin: 0 0 22px;
+        font-size: 13px;
+        line-height: 1.9;
+        color: var(--ink-3);
+      }
+      .stamp {
+        display: inline-block;
+        margin-bottom: 18px;
+        padding: 13px 8px;
+        border: 3px solid var(--vermilion);
+        color: var(--vermilion);
+        width: 82px;
+        font-size: 15px;
+        line-height: 1.2;
+        transform: rotate(-7deg);
+      }
+      a {
+        display: inline-block;
+        padding: 10px 20px;
+        border: 2px solid var(--vermilion);
+        background: var(--vermilion);
+        color: #fdf3df;
+        text-decoration: none;
+        letter-spacing: 0.12em;
+        box-shadow: 3px 3px 0 0 #83241d;
+      }
+      small {
+        display: block;
+        margin-top: 22px;
+        font-size: 10px;
+        letter-spacing: 0.16em;
+        color: var(--ink-3);
+      }
+    </style>
+  </head>
+  <body>
+    <main class="sheet">
+      <div class="kicker">SELF-DISCIPLINE PASSBOOK</div>
+      <div class="stamp">账页</div>
+      <h1>这一页没有存入记录</h1>
+      <p>你访问的账页不在存折里。<br />回到首页，继续今天的自律。</p>
+      <a href="./">回到存折首页</a>
+      <small>404 · PAGE NOT FOUND</small>
+    </main>
+  </body>
+</html>

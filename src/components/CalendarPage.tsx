@@ -37,6 +37,28 @@ export function CalendarPage({ toast }: Props) {
   const [formOpen, setFormOpen] = useState(false);
   const [editing, setEditing] = useState<Deadline | null>(null);
   const [confirmId, setConfirmId] = useState<string | null>(null);
+  const [notifyPermission, setNotifyPermission] = useState<
+    NotificationPermission | 'unsupported'
+  >(() =>
+    typeof Notification === 'undefined'
+      ? 'unsupported'
+      : Notification.permission,
+  );
+
+  const requestNotify = async () => {
+    if (typeof Notification === 'undefined') {
+      toast('当前浏览器不支持系统通知', 'warn');
+      return;
+    }
+    const result = await Notification.requestPermission();
+    setNotifyPermission(result);
+    toast(
+      result === 'granted'
+        ? '已开启：24 小时内到期的 DDL 会弹出系统通知'
+        : '未获得通知权限，可在浏览器设置中手动开启',
+      result === 'granted' ? 'ok' : 'warn',
+    );
+  };
 
   const days = useMemo(
     () => buildMonthGrid(visible.year, visible.month),
@@ -187,6 +209,22 @@ export function CalendarPage({ toast }: Props) {
           </p>
         </div>
         <div style={{ display: 'flex', gap: 8, flexWrap: 'wrap' }}>
+          {notifyPermission === 'granted' ? (
+            <span className="tag tag-green">到期提醒已开启</span>
+          ) : (
+            <button
+              type="button"
+              className="btn btn-sm"
+              disabled={notifyPermission === 'unsupported'}
+              onClick={() => void requestNotify()}
+            >
+              {notifyPermission === 'denied'
+                ? '通知被浏览器阻止'
+                : notifyPermission === 'unsupported'
+                  ? '不支持通知'
+                  : '开启到期提醒'}
+            </button>
+          )}
           <button type="button" className="btn btn-sm" onClick={handleExport}>
             导出 .ics
           </button>
