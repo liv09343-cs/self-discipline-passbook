@@ -428,11 +428,24 @@ class SupabaseSyncService {
     let changed = false;
     const books: Book[] = [];
     const seen = new Set<string>();
+    const remoteNames = new Set<string>();
+    this.remoteBooks.forEach((remote) => {
+      if (remote.deleted) return;
+      const parsed = parseRemoteBook(remote.bookJson);
+      if (parsed) remoteNames.add(parsed.name);
+    });
 
     local.books.forEach((localBook) => {
       seen.add(localBook.id);
       const remote = this.remoteBooks.get(localBook.id);
       if (!remote) {
+        if (
+          localBook.id === 'seed-book-main' &&
+          remoteNames.has(localBook.name)
+        ) {
+          changed = true;
+          return;
+        }
         books.push(localBook);
         return;
       }

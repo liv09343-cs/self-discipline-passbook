@@ -131,6 +131,7 @@ function makeSessionRecord(
 
 export function createSeedState(): AppState {
   const main = createBook('我的存折', '自');
+  main.id = 'seed-book-main';
   main.motto = '把自律存进时间银行，把拖延兑换成清醒。';
   const openedAt = at(-10, 9, 0);
   main.openedAt = openedAt;

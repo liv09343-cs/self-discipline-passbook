@@ -7,6 +7,7 @@ import { LedgerPage } from './components/LedgerPage';
 import { RewardsPage } from './components/RewardsPage';
 import { CalendarPage } from './components/CalendarPage';
 import { StatsPage } from './components/StatsPage';
+import { PassbookCover } from './components/PassbookCover';
 import { ToastStack, useToasts } from './components/Toast';
 import { useSupabaseAutoSync } from './hooks/useSupabaseSync';
 import { useDeadlineNotifications } from './hooks/useDeadlineNotifications';
@@ -24,6 +25,7 @@ export default function App() {
   useSupabaseAutoSync();
   useDeadlineNotifications(state.books);
   const [tab, setTab] = useState<TabKey>(readTabFromHash);
+  const [showCover, setShowCover] = useState(true);
   const { items, push } = useToasts();
 
   const changeTab = (next: TabKey) => {
@@ -33,9 +35,23 @@ export default function App() {
     }
   };
 
+  if (showCover) {
+    return (
+      <>
+        <PassbookCover onOpen={() => setShowCover(false)} />
+        <ToastStack items={items} />
+      </>
+    );
+  }
+
   return (
     <>
-      <PassbookShell tab={tab} onTabChange={changeTab} toast={push}>
+      <PassbookShell
+        tab={tab}
+        onTabChange={changeTab}
+        onShowCover={() => setShowCover(true)}
+        toast={push}
+      >
         {tab === 'timer' && (
           <TimerPage toast={push} onGoCalendar={() => changeTab('calendar')} />
         )}

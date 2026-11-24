@@ -20,11 +20,18 @@ const TABS: { key: TabKey; label: string; index: string }[] = [
 interface Props {
   tab: TabKey;
   onTabChange: (tab: TabKey) => void;
+  onShowCover: () => void;
   toast: (text: string, tone?: ToastTone) => void;
   children: ReactNode;
 }
 
-export function PassbookShell({ tab, onTabChange, toast, children }: Props) {
+export function PassbookShell({
+  tab,
+  onTabChange,
+  onShowCover,
+  toast,
+  children,
+}: Props) {
   const { state, book, balance, actions } = useApp();
   const [editingName, setEditingName] = useState(false);
   const [draftName, setDraftName] = useState(state.profile.name);
@@ -190,6 +197,13 @@ export function PassbookShell({ tab, onTabChange, toast, children }: Props) {
         <main className="pb-body">{children}</main>
 
         <footer className="pb-foot">
+          <button
+            type="button"
+            className="btn btn-sm btn-ghost"
+            onClick={onShowCover}
+          >
+            封面
+          </button>
           <span>自律存折 · 每一笔专注都有回执</span>
           <span>
             本页 <strong>{TABS.findIndex((item) => item.key === tab) + 1}</strong>{' '}

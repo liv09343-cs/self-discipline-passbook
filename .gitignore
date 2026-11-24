@@ -1,6 +1,7 @@
 node_modules
 dist
 .tools
+submission
 public/agc-config.json
 public/agc-schema.json
 
