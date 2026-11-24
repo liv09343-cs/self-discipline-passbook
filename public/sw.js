@@ -1,4 +1,4 @@
-const CACHE = 'passbook-v1';
+const CACHE = 'passbook-v2';
 const PRECACHE = [
   './',
   './index.html',

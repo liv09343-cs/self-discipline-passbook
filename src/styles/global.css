@@ -2635,3 +2635,647 @@ textarea {
     display: none;
   }
 }
+html,
+body {
+  overflow-x: hidden;
+}
+
+body {
+  min-height: 100vh;
+  min-height: 100dvh;
+}
+
+.cover-stage {
+  min-height: 100vh;
+  min-height: 100dvh;
+}
+
+.dl-form {
+  max-height: 90vh;
+  max-height: 90dvh;
+}
+
+@supports (padding: env(safe-area-inset-bottom)) {
+  .pb-foot {
+    padding-bottom: calc(16px + env(safe-area-inset-bottom));
+  }
+
+  .toast-stack {
+    bottom: calc(26px + env(safe-area-inset-bottom));
+  }
+}
+
+@media (min-width: 861px) and (max-width: 1100px) {
+  .app-stage {
+    padding: 20px 14px 48px;
+  }
+
+  .pb-head {
+    padding: 26px 26px 20px;
+  }
+
+  .pb-body {
+    padding: 22px 26px 28px;
+  }
+
+  .timer-layout {
+    grid-template-columns: 1.05fr 0.95fr;
+    gap: 18px;
+  }
+
+  .calendar-layout {
+    grid-template-columns: 1.2fr 0.8fr;
+    gap: 18px;
+  }
+}
+
+@media (max-width: 600px) {
+  .app-stage {
+    padding: 8px 6px calc(28px + env(safe-area-inset-bottom));
+  }
+
+  .passbook {
+    border-width: 1.5px;
+    box-shadow: 4px 4px 0 0 rgba(22, 14, 6, 0.5);
+  }
+
+  .pb-head {
+    padding: 18px 16px 14px;
+    gap: 8px;
+  }
+
+  .brand-cn {
+    font-size: 24px;
+    letter-spacing: 0.12em;
+  }
+
+  .brand-kicker {
+    font-size: 9px;
+    letter-spacing: 0.2em;
+  }
+
+  .brand-en {
+    font-size: 8px;
+    letter-spacing: 0.14em;
+    line-height: 1.8;
+  }
+
+  .brand-stamp {
+    width: 54px;
+    height: 54px;
+    font-size: 10px;
+    top: 12px;
+    right: 12px;
+    opacity: 0.45;
+  }
+
+  .pb-meta {
+    padding: 12px 16px;
+    gap: 8px 12px;
+  }
+
+  .pb-meta dt {
+    font-size: 9px;
+  }
+
+  .pb-meta dd {
+    font-size: 13px;
+  }
+
+  .pb-balance {
+    grid-template-columns: 1fr 1fr;
+  }
+
+  .balance-cell {
+    padding: 11px 14px 12px;
+  }
+
+  .balance-cell:nth-child(3),
+  .balance-cell:nth-child(4) {
+    border-top: 1px dashed var(--line);
+  }
+
+  .balance-cell:nth-child(3) {
+    border-left: none;
+  }
+
+  .balance-value {
+    font-size: 24px;
+  }
+
+  .balance-cell:first-child .balance-value {
+    font-size: 30px;
+  }
+
+  .balance-unit {
+    font-size: 10px;
+  }
+
+  .balance-label {
+    font-size: 9px;
+    letter-spacing: 0.16em;
+  }
+
+  .balance-note {
+    font-size: 10px;
+    margin-top: 3px;
+  }
+
+  .book-bar {
+    padding: 8px 14px;
+    gap: 8px;
+  }
+
+  .book-bar-label {
+    font-size: 9px;
+  }
+
+  .book-tabs {
+    flex-wrap: nowrap;
+    overflow-x: auto;
+    padding-bottom: 2px;
+  }
+
+  .book-tab {
+    flex: 0 0 auto;
+    font-size: 11px;
+    padding: 6px 8px;
+  }
+
+  .book-bar-actions {
+    gap: 6px;
+  }
+
+  .book-bar-actions .btn {
+    flex: 1;
+    padding: 7px 8px;
+    font-size: 11px;
+  }
+
+  .pb-tabs {
+    padding: 0 6px;
+  }
+
+  .pb-tab {
+    min-height: 42px;
+    padding: 9px 10px 8px;
+    font-size: 12px;
+    letter-spacing: 0.06em;
+  }
+
+  .pb-tab-index {
+    display: none;
+  }
+
+  .pb-body {
+    padding: 16px 12px 22px;
+  }
+
+  .panel {
+    padding: 14px 14px 16px;
+    box-shadow: 3px 3px 0 0 rgba(77, 51, 29, 0.24);
+  }
+
+  .page-title {
+    font-size: 19px;
+  }
+
+  .page-title::after {
+    width: 34px;
+  }
+
+  .page-sub {
+    font-size: 11px;
+  }
+
+  .page-head {
+    gap: 10px;
+    margin-bottom: 14px;
+  }
+
+  .page-head .btn {
+    min-height: 40px;
+  }
+
+  .btn {
+    min-height: 40px;
+    padding: 9px 12px;
+    font-size: 13px;
+  }
+
+  .btn-sm {
+    min-height: 34px;
+  }
+
+  .input,
+  .select,
+  .textarea {
+    font-size: 16px;
+    padding: 10px 10px;
+  }
+
+  .field > span {
+    font-size: 10px;
+  }
+
+  .clock-display {
+    font-size: 38px;
+    letter-spacing: 0.03em;
+  }
+
+  .clock-face {
+    padding: 18px 12px 16px;
+    margin: 14px 0 12px;
+  }
+
+  .clock-sub {
+    font-size: 10px;
+  }
+
+  .timer-actions {
+    gap: 8px;
+  }
+
+  .timer-actions .btn {
+    flex: 1 1 45%;
+  }
+
+  .goal-picker {
+    padding: 10px;
+  }
+
+  .goal-chips {
+    gap: 6px;
+  }
+
+  .goal-chip {
+    flex: 1 1 44%;
+    min-height: 38px;
+  }
+
+  .goal-custom {
+    width: 100%;
+  }
+
+  .stat-grid {
+    grid-template-columns: 1fr 1fr;
+    gap: 8px;
+  }
+
+  .stat-tile {
+    padding: 10px 11px;
+  }
+
+  .stat-tile-label {
+    font-size: 9px;
+    letter-spacing: 0.12em;
+  }
+
+  .stat-tile-value {
+    font-size: 19px;
+  }
+
+  .stat-tile-sub {
+    font-size: 9px;
+  }
+
+  .stats-panel {
+    margin-bottom: 14px;
+  }
+
+  .heat-grid {
+    gap: 4px;
+  }
+
+  .heat-cell .heat-day {
+    font-size: 8px;
+    padding: 1px 2px;
+  }
+
+  .cal-toolbar {
+    gap: 6px;
+  }
+
+  .cal-month {
+    font-size: 17px;
+  }
+
+  .cal-nav {
+    gap: 4px;
+  }
+
+  .cal-nav .btn {
+    padding: 6px 9px;
+    font-size: 11px;
+  }
+
+  .cal-grid {
+    border-left-width: 1.5px;
+  }
+
+  .cal-cell {
+    min-height: 42px;
+    padding: 3px;
+  }
+
+  .cal-dnum {
+    font-size: 11px;
+  }
+
+  .cal-dow {
+    font-size: 9px;
+    padding: 5px 0;
+  }
+
+  .cal-mark {
+    width: 4px;
+    height: 4px;
+  }
+
+  .cal-legend {
+    gap: 8px;
+    font-size: 9px;
+  }
+
+  .reward-grid {
+    gap: 10px;
+  }
+
+  .reward-card {
+    padding: 12px;
+    gap: 10px;
+  }
+
+  .reward-glyph {
+    width: 34px;
+    height: 34px;
+    font-size: 15px;
+  }
+
+  .reward-title {
+    font-size: 14px;
+  }
+
+  .reward-form {
+    grid-template-columns: 1fr 88px;
+    gap: 8px;
+  }
+
+  .reward-form .btn {
+    grid-column: span 2;
+  }
+
+  .ledger-summary {
+    gap: 12px;
+    padding: 10px 12px;
+    font-size: 11px;
+  }
+
+  .ledger-table {
+    font-size: 12px;
+  }
+
+  .ledger-table thead th {
+    padding: 7px 6px;
+    font-size: 9px;
+    letter-spacing: 0.08em;
+  }
+
+  .ledger-table tbody td {
+    padding: 9px 6px;
+  }
+
+  .ledger-table .col-date {
+    width: 78px;
+    font-size: 10px;
+  }
+
+  .ledger-table .col-amt {
+    width: 64px;
+  }
+
+  .ledger-table .col-type {
+    display: none;
+  }
+
+  .detail-list {
+    max-height: 460px;
+  }
+
+  .detail-day-head {
+    font-size: 11px;
+  }
+
+  .detail-day-sum {
+    font-size: 10px;
+  }
+
+  .detail-session {
+    font-size: 10px;
+    gap: 6px;
+    padding-left: 8px;
+  }
+
+  .pb-foot {
+    padding: 8px 14px calc(12px + env(safe-area-inset-bottom));
+    font-size: 9px;
+    gap: 8px;
+  }
+
+  .pb-foot span:last-child {
+    display: none;
+  }
+
+  .pb-foot .btn {
+    min-height: 30px;
+    padding: 4px 8px;
+    font-size: 10px;
+  }
+
+  .toast-stack {
+    bottom: calc(14px + env(safe-area-inset-bottom));
+  }
+
+  .toast {
+    padding: 9px 11px;
+    font-size: 12px;
+  }
+
+  .dl-form-overlay {
+    padding: 8px;
+    align-items: flex-end;
+  }
+
+  .dl-form {
+    width: 100%;
+    padding: 18px 16px 20px;
+    max-height: 94dvh;
+  }
+
+  .dl-form-head h3 {
+    font-size: 18px;
+  }
+
+  .form-grid {
+    gap: 10px;
+  }
+
+  .data-rows {
+    grid-template-columns: 86px 1fr;
+    font-size: 11px;
+  }
+
+  .code-box {
+    font-size: 10px;
+  }
+
+  .book-manager-row {
+    padding: 8px;
+  }
+
+  .book-glyph-input {
+    width: 40px;
+    min-width: 40px;
+  }
+
+  .book-create-row {
+    gap: 8px;
+  }
+
+  .cover-stage {
+    padding: 10px 6px calc(20px + env(safe-area-inset-bottom));
+  }
+
+  .cover-book {
+    padding: 28px 20px 24px;
+    min-height: auto;
+    box-shadow: 5px 5px 0 rgba(22, 14, 6, 0.5);
+  }
+
+  .cover-title {
+    font-size: 34px;
+    letter-spacing: 0.16em;
+  }
+
+  .cover-kicker {
+    font-size: 8px;
+    letter-spacing: 0.3em;
+  }
+
+  .cover-en {
+    font-size: 8px;
+    letter-spacing: 0.2em;
+  }
+
+  .cover-stamp {
+    width: 56px;
+    height: 56px;
+    font-size: 10px;
+    right: 14px;
+    top: 16px;
+  }
+
+  .cover-rule {
+    margin: 20px 0 16px;
+  }
+
+  .cover-meta {
+    gap: 10px 12px;
+  }
+
+  .cover-meta dt {
+    font-size: 9px;
+  }
+
+  .cover-meta dd {
+    font-size: 13px;
+  }
+
+  .cover-balance {
+    padding: 12px 14px;
+    margin-top: 18px;
+  }
+
+  .cover-balance-value {
+    font-size: 30px;
+  }
+
+  .cover-open {
+    width: 100%;
+    margin-top: 20px;
+  }
+
+  .cover-foot {
+    font-size: 9px;
+  }
+}
+
+@media (max-width: 380px) {
+  .brand-cn {
+    font-size: 21px;
+  }
+
+  .balance-value {
+    font-size: 21px;
+  }
+
+  .balance-cell:first-child .balance-value {
+    font-size: 26px;
+  }
+
+  .pb-tab {
+    padding: 8px;
+    font-size: 11px;
+  }
+
+  .clock-display {
+    font-size: 34px;
+  }
+
+  .stat-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .cal-cell {
+    min-height: 38px;
+  }
+
+  .cal-mark {
+    width: 3px;
+    height: 3px;
+  }
+
+  .cover-title {
+    font-size: 30px;
+  }
+}
+
+@media (orientation: landscape) and (max-height: 520px) {
+  .app-stage {
+    padding: 6px;
+  }
+
+  .pb-head {
+    padding: 12px 18px;
+  }
+
+  .brand-cn {
+    font-size: 24px;
+  }
+
+  .brand-stamp {
+    display: none;
+  }
+
+  .pb-balance {
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+  }
+
+  .cover-stage {
+    align-items: flex-start;
+  }
+
+  .cover-book {
+    min-height: auto;
+  }
+}
