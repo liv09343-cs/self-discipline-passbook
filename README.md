@@ -4,6 +4,8 @@
 
 在线地址：<https://liv09343-cs.github.io/self-discipline-passbook/>
 
+当前版本：**v1.1** · 版本更新说明见 [CHANGELOG.md](./CHANGELOG.md)
+
 ![自律存折封面](./public/og-cover.png)
 
 ## 功能
